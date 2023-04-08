@@ -1,6 +1,6 @@
 import numpy as np
 import time
-
+import copy
 REMAIN_TIME = 60000
 
 def findValidDirections(x, y):
@@ -111,7 +111,6 @@ class Board:
                                [0, 0, 0, 0, 0, 0, 0, 0],
                                [0, 0, 0, 0, 0, 0, 0, 0],
                                [0, 0, 0, 0, 0, 0, 0, 0]])
-		self.turn = 1
 
 	def findValidMove(self, currentPlayer):
 		validMove = []
@@ -168,8 +167,117 @@ class Board:
 
 		return validMove
 	
-	def makeMove(self, Cell):
-		pass
+	def makeMove(self, Cell, currentPlayer):
+		x, y = Cell
+		self.state[y][x] = currentPlayer
+		if y > 1: self.state = searchUP(self.state, x, y-1, currentPlayer)
+		if y < 6: self.state = searchDOWN(self.state, x, y+1, currentPlayer)
+		if x > 1: self.state = searchLEFT(self.state, x-1, y, currentPlayer)
+		if x < 6: self.state = searchRIGHT(self.state, x+1, y,currentPlayer)
+		if x > 1 and y > 1: self.state = searchUP_LEFT(self.state, x-1, y-1, currentPlayer)
+		if x > 1 and y < 6: self.state = searchDOWN_LEFT(self.state, x-1, y+1, currentPlayer)
+		if x < 6 and y > 1: self.state = searchUP_RIGHT(self.state, x+1, y-1, currentPlayer)
+		#if x < 6 and y < 6: self.state = searchDOWN_RIGHT(self.state, x+1, y+1, currentPlayer)
+
+def searchUP(state, x, y, currentPlayer):
+	if state[y][x] == 0 or state[y][x] == currentPlayer:
+		return state
+	oldstate = copy.deepcopy(state)
+
+	while y >= 0:
+		if state[y][x] == currentPlayer:
+			return state
+		state[y][x] = currentPlayer
+		y -= 1
+	return oldstate
+
+def searchDOWN(state,x, y, currentPlayer):
+	if state[y][x] == 0 or state[y][x] == currentPlayer:
+		return state
+	oldstate = copy.deepcopy(state)
+
+	while y <= 7:
+		if state[y][x] == currentPlayer:
+			return state
+		state[y][x] = currentPlayer
+		y += 1
+	return oldstate
+
+def searchLEFT(state, x, y, currentPlayer):
+	if state[y][x] == 0 or state[y][x] == currentPlayer:
+		return state
+	oldstate = copy.deepcopy(state)
+
+	while x >= 0:
+		if state[y][x] == currentPlayer:
+			return state
+		state[y][x] = currentPlayer
+		x -= 1
+	return oldstate
+
+def searchRIGHT(state, x, y, currentPlayer):
+	if state[y][x] == 0 or state[y][x] == currentPlayer:
+		return state
+	oldstate = copy.deepcopy(state)
+
+	while x <= 7:
+		if state[y][x] == currentPlayer:
+			return state
+		state[y][x] = currentPlayer
+		x += 1
+	return oldstate
+
+def searchUP_LEFT(state, x, y, currentPlayer):
+	if state[y][x] == 0 or state[y][x] == currentPlayer:
+		return state
+	oldstate = copy.deepcopy(state)
+
+	while x >= 0 and y >= 0:
+		if state[y][x] == currentPlayer:
+			return state
+		state[y][x] = currentPlayer
+		x -= 1
+		y -= 1
+	return oldstate
+
+def searchDOWN_LEFT(state, x, y, currentPlayer):
+	if state[y][x] == 0 or state[y][x] == currentPlayer:
+		return state
+	oldstate = copy.deepcopy(state)
+
+	while x >= 0 and y <= 7:
+		if state[y][x] == currentPlayer:
+			return state
+		state[y][x] = currentPlayer
+		x -= 1
+		y += 1
+	return oldstate
+
+def searchUP_RIGHT(state, x, y, currentPlayer):
+	if state[y][x] == 0 or state[y][x] == currentPlayer:
+		return state
+	oldstate = copy.deepcopy(state)
+
+	while x <= 7 and y >= 0:
+		if state[y][x] == currentPlayer:
+			return state
+		state[y][x] = currentPlayer
+		x += 1
+		y -= 1
+	return oldstate
+
+def searchDOWN_RIGHT(state, x, y, currentPlayer):
+	if state[y][x] == 0 or state[y][x] == currentPlayer:
+		return state
+	oldstate = copy.deepcopy(state)
+
+	while x <= 7 and y <= 7:
+		if state[y][x] == currentPlayer:
+			return state
+		state[y][x] = currentPlayer
+		x += 1
+		y += 1
+	return oldstate
 
 def select_move(cur_state=None, player_to_move=None, remain_time=None):
 	validMove = cur_state.findValidMove(player_to_move)
@@ -177,9 +285,15 @@ def select_move(cur_state=None, player_to_move=None, remain_time=None):
 	if validMove == []:
 		return None
 
+"""test some move"""
 game = Board()
 print(game.state)
-select_move(game, -1)
+select_move(game, 1)
+game.makeMove((2,4), 1)
+game.makeMove((2,5),-1)
+game.makeMove((3,5),1)
+game.makeMove((4,5),-1)
+print(game.state)
 
 
 
