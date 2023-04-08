@@ -100,85 +100,6 @@ def checkDOWN_LEFT(x, y, state, currentPlayer):
 	
 	return False
 
-class Board:
-
-	def __init__(self):
-		self.state = np.array([[0, 0, 0, 0, 0, 0, 0, 0],
-                               [0, 0, 0, 0, 0, 0, 0, 0],
-                               [0, 0, 0, 0, 0, 0, 0, 0],
-                               [0, 0, 0, 1, -1, 0, 0, 0],
-                               [0, 0, 0, -1, 1, 0, 0, 0],
-                               [0, 0, 0, 0, 0, 0, 0, 0],
-                               [0, 0, 0, 0, 0, 0, 0, 0],
-                               [0, 0, 0, 0, 0, 0, 0, 0]])
-
-	def findValidMove(self, currentPlayer):
-		validMove = []
-		for y in range(8):
-			for x in range(8):
-
-				if self.state[y][x] != 0:
-					continue
-			
-				validDirections = findValidDirections(x,y)
-
-				for direction in validDirections:
-
-					
-					if direction == "UP":
-						if checkUP(x, y-1, self.state, currentPlayer):
-							validMove.append((x, y))
-							break
-
-					if direction == "DOWN":
-						if checkDOWN(x, y+1, self.state, currentPlayer):
-							validMove.append((x, y))
-							break
-
-					if direction == "LEFT":
-						if checkLEFT(x-1, y, self.state, currentPlayer):
-							validMove.append((x, y))
-							break
-					
-					if direction == "RIGHT":
-						if checkRIGHT(x+1, y, self.state, currentPlayer):
-							validMove.append((x, y))
-							break
-
-					if direction == "UP_LEFT":
-						if checkUP_LEFT(x-1, y-1, self.state, currentPlayer):
-							validMove.append((x, y))
-							break
-
-					if direction == "UP_RIGHT":
-						if checkUP_RIGHT(x+1, y-1, self.state, currentPlayer):
-							validMove.append((x, y))
-							break
-
-					if direction == "DOWN_LEFT":
-						if checkDOWN_LEFT(x-1, y+1, self.state, currentPlayer):
-							validMove.append((x, y))
-							break
-
-					if direction == "DOWN_RIGHT":
-						if checkDOWN_RIGHT(x+1, y+1, self.state, currentPlayer):
-							validMove.append((x, y))
-							break
-
-		return validMove
-	
-	def makeMove(self, Cell, currentPlayer):
-		x, y = Cell
-		self.state[y][x] = currentPlayer
-		if y > 1: self.state = searchUP(self.state, x, y-1, currentPlayer)
-		if y < 6: self.state = searchDOWN(self.state, x, y+1, currentPlayer)
-		if x > 1: self.state = searchLEFT(self.state, x-1, y, currentPlayer)
-		if x < 6: self.state = searchRIGHT(self.state, x+1, y,currentPlayer)
-		if x > 1 and y > 1: self.state = searchUP_LEFT(self.state, x-1, y-1, currentPlayer)
-		if x > 1 and y < 6: self.state = searchDOWN_LEFT(self.state, x-1, y+1, currentPlayer)
-		if x < 6 and y > 1: self.state = searchUP_RIGHT(self.state, x+1, y-1, currentPlayer)
-		#if x < 6 and y < 6: self.state = searchDOWN_RIGHT(self.state, x+1, y+1, currentPlayer)
-
 def searchUP(state, x, y, currentPlayer):
 	if state[y][x] == 0 or state[y][x] == currentPlayer:
 		return state
@@ -279,6 +200,86 @@ def searchDOWN_RIGHT(state, x, y, currentPlayer):
 		y += 1
 	return oldstate
 
+class Board:
+
+	def __init__(self):
+		self.state = np.array([[0, 0, 0, 0, 0, 0, 0, 0],
+                               [0, 0, 0, 0, 0, 0, 0, 0],
+                               [0, 0, 0, 0, 0, 0, 0, 0],
+                               [0, 0, 0, 1, -1, 0, 0, 0],
+                               [0, 0, 0, -1, 1, 0, 0, 0],
+                               [0, 0, 0, 0, 0, 0, 0, 0],
+                               [0, 0, 0, 0, 0, 0, 0, 0],
+                               [0, 0, 0, 0, 0, 0, 0, 0]])
+
+	def findValidMove(self, currentPlayer):
+		validMove = []
+		for y in range(8):
+			for x in range(8):
+
+				if self.state[y][x] != 0:
+					continue
+			
+				validDirections = findValidDirections(x,y)
+
+				for direction in validDirections:
+
+					
+					if direction == "UP":
+						if checkUP(x, y-1, self.state, currentPlayer):
+							validMove.append((x, y))
+							break
+
+					if direction == "DOWN":
+						if checkDOWN(x, y+1, self.state, currentPlayer):
+							validMove.append((x, y))
+							break
+
+					if direction == "LEFT":
+						if checkLEFT(x-1, y, self.state, currentPlayer):
+							validMove.append((x, y))
+							break
+					
+					if direction == "RIGHT":
+						if checkRIGHT(x+1, y, self.state, currentPlayer):
+							validMove.append((x, y))
+							break
+
+					if direction == "UP_LEFT":
+						if checkUP_LEFT(x-1, y-1, self.state, currentPlayer):
+							validMove.append((x, y))
+							break
+
+					if direction == "UP_RIGHT":
+						if checkUP_RIGHT(x+1, y-1, self.state, currentPlayer):
+							validMove.append((x, y))
+							break
+
+					if direction == "DOWN_LEFT":
+						if checkDOWN_LEFT(x-1, y+1, self.state, currentPlayer):
+							validMove.append((x, y))
+							break
+
+					if direction == "DOWN_RIGHT":
+						if checkDOWN_RIGHT(x+1, y+1, self.state, currentPlayer):
+							validMove.append((x, y))
+							break
+
+		return validMove
+	
+	def makeMove(self, Cell, currentPlayer):
+		x, y = Cell
+		self.state[y][x] = currentPlayer
+		if y > 1: self.state = searchUP(self.state, x, y-1, currentPlayer)
+		if y < 6: self.state = searchDOWN(self.state, x, y+1, currentPlayer)
+		if x > 1: self.state = searchLEFT(self.state, x-1, y, currentPlayer)
+		if x < 6: self.state = searchRIGHT(self.state, x+1, y,currentPlayer)
+		if x > 1 and y > 1: self.state = searchUP_LEFT(self.state, x-1, y-1, currentPlayer)
+		if x > 1 and y < 6: self.state = searchDOWN_LEFT(self.state, x-1, y+1, currentPlayer)
+		if x < 6 and y > 1: self.state = searchUP_RIGHT(self.state, x+1, y-1, currentPlayer)
+		if x < 6 and y < 6: self.state = searchDOWN_RIGHT(self.state, x+1, y+1, currentPlayer)
+
+
 def select_move(cur_state=None, player_to_move=None, remain_time=None):
 	validMove = cur_state.findValidMove(player_to_move)
 	print(validMove)
@@ -293,6 +294,9 @@ game.makeMove((2,4), 1)
 game.makeMove((2,5),-1)
 game.makeMove((3,5),1)
 game.makeMove((4,5),-1)
+game.makeMove((4,6),1)
+game.makeMove((4,7),-1)
+game.makeMove((5,5),1)
 print(game.state)
 
 
