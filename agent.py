@@ -23,6 +23,7 @@ def checkUP(x, y, state, currentPlayer):
 	if state[y][x] == currentPlayer or state[y][x] == 0: return False
 	y -= 1
 	while y >= 0 :
+		if state[y][x] == 0: return False
 		if state[y][x] == currentPlayer: return True
 		y -= 1
 	
@@ -32,6 +33,7 @@ def checkDOWN(x, y, state, currentPlayer):
 	if state[y][x] == currentPlayer or state[y][x] == 0: return False
 	y += 1
 	while y <= 7 :
+		if state[y][x] == 0: return False
 		if state[y][x] == currentPlayer: return True
 		y += 1
 	
@@ -42,6 +44,7 @@ def checkLEFT(x, y, state, currentPlayer):
 	if state[y][x] == currentPlayer or state[y][x] == 0: return False
 	x -= 1
 	while x >= 0 :
+		if state[y][x] == 0: return False
 		if state[y][x] == currentPlayer: return True
 		x -= 1
 	
@@ -51,6 +54,7 @@ def checkRIGHT(x, y, state, currentPlayer):
 	if state[y][x] == currentPlayer or state[y][x] == 0: return False
 	x += 1
 	while x <= 7 :
+		if state[y][x] == 0: return False
 		if state[y][x] == currentPlayer: return True
 		x += 1
 	
@@ -61,6 +65,7 @@ def checkUP_LEFT(x, y, state, currentPlayer):
 	x -= 1
 	y -= 1
 	while x >= 0 and y >= 0 :
+		if state[y][x] == 0: return False
 		if state[y][x] == currentPlayer: return True
 		x -= 1
 		y -= 1
@@ -72,6 +77,7 @@ def checkUP_RIGHT(x, y, state, currentPlayer):
 	x += 1
 	y -= 1
 	while x <= 7 and y >= 0 :
+		if state[y][x] == 0: return False
 		if state[y][x] == currentPlayer: return True
 		x += 1
 		y -= 1
@@ -83,6 +89,7 @@ def checkDOWN_RIGHT(x, y, state, currentPlayer):
 	x += 1
 	y += 1
 	while x <= 7 and y <= 7 :
+		if state[y][x] == 0: return False
 		if state[y][x] == currentPlayer: return True
 		x += 1
 		y += 1
@@ -94,6 +101,7 @@ def checkDOWN_LEFT(x, y, state, currentPlayer):
 	x -= 1
 	y +=1
 	while x >= 0 and y <= 7 :
+		if state[y][x] == 0: return False
 		if state[y][x] == currentPlayer: return True
 		x -= 1
 		y += 1
@@ -106,11 +114,11 @@ def searchUP(state, x, y, currentPlayer):
 	oldstate = copy.deepcopy(state)
 
 	while y >= 0:
+		if state[y][x] == 0: return oldstate
 		if state[y][x] == currentPlayer:
 			return state
 		state[y][x] = currentPlayer
 		y -= 1
-	return oldstate
 
 def searchDOWN(state,x, y, currentPlayer):
 	if state[y][x] == 0 or state[y][x] == currentPlayer:
@@ -118,11 +126,11 @@ def searchDOWN(state,x, y, currentPlayer):
 	oldstate = copy.deepcopy(state)
 
 	while y <= 7:
+		if state[y][x] == 0: return oldstate
 		if state[y][x] == currentPlayer:
 			return state
 		state[y][x] = currentPlayer
 		y += 1
-	return oldstate
 
 def searchLEFT(state, x, y, currentPlayer):
 	if state[y][x] == 0 or state[y][x] == currentPlayer:
@@ -130,11 +138,11 @@ def searchLEFT(state, x, y, currentPlayer):
 	oldstate = copy.deepcopy(state)
 
 	while x >= 0:
+		if state[y][x] == 0: return oldstate
 		if state[y][x] == currentPlayer:
 			return state
 		state[y][x] = currentPlayer
 		x -= 1
-	return oldstate
 
 def searchRIGHT(state, x, y, currentPlayer):
 	if state[y][x] == 0 or state[y][x] == currentPlayer:
@@ -142,11 +150,11 @@ def searchRIGHT(state, x, y, currentPlayer):
 	oldstate = copy.deepcopy(state)
 
 	while x <= 7:
+		if state[y][x] == 0: return oldstate
 		if state[y][x] == currentPlayer:
 			return state
 		state[y][x] = currentPlayer
 		x += 1
-	return oldstate
 
 def searchUP_LEFT(state, x, y, currentPlayer):
 	if state[y][x] == 0 or state[y][x] == currentPlayer:
@@ -154,12 +162,12 @@ def searchUP_LEFT(state, x, y, currentPlayer):
 	oldstate = copy.deepcopy(state)
 
 	while x >= 0 and y >= 0:
+		if state[y][x] == 0: return oldstate
 		if state[y][x] == currentPlayer:
 			return state
 		state[y][x] = currentPlayer
 		x -= 1
 		y -= 1
-	return oldstate
 
 def searchDOWN_LEFT(state, x, y, currentPlayer):
 	if state[y][x] == 0 or state[y][x] == currentPlayer:
@@ -167,12 +175,12 @@ def searchDOWN_LEFT(state, x, y, currentPlayer):
 	oldstate = copy.deepcopy(state)
 
 	while x >= 0 and y <= 7:
+		if state[y][x] == 0: return oldstate
 		if state[y][x] == currentPlayer:
 			return state
 		state[y][x] = currentPlayer
 		x -= 1
 		y += 1
-	return oldstate
 
 def searchUP_RIGHT(state, x, y, currentPlayer):
 	if state[y][x] == 0 or state[y][x] == currentPlayer:
@@ -180,12 +188,12 @@ def searchUP_RIGHT(state, x, y, currentPlayer):
 	oldstate = copy.deepcopy(state)
 
 	while x <= 7 and y >= 0:
+		if state[y][x] == 0: return oldstate
 		if state[y][x] == currentPlayer:
 			return state
 		state[y][x] = currentPlayer
 		x += 1
 		y -= 1
-	return oldstate
 
 def searchDOWN_RIGHT(state, x, y, currentPlayer):
 	if state[y][x] == 0 or state[y][x] == currentPlayer:
@@ -193,31 +201,19 @@ def searchDOWN_RIGHT(state, x, y, currentPlayer):
 	oldstate = copy.deepcopy(state)
 
 	while x <= 7 and y <= 7:
+		if state[y][x] == 0: return oldstate
 		if state[y][x] == currentPlayer:
 			return state
 		state[y][x] = currentPlayer
 		x += 1
 		y += 1
-	return oldstate
 
-class Board:
-
-	def __init__(self):
-		self.state = np.array([[0, 0, 0, 0, 0, 0, 0, 0],
-                               [0, 0, 0, 0, 0, 0, 0, 0],
-                               [0, 0, 0, 0, 1, 0, 0, 0],
-                               [0, 0, 0, 1, -1, 0, 0, 0],
-                               [0, 0, 0, -1, 1, 0, 0, 0],
-                               [0, 0, 0, 0, 0, 0, 0, 0],
-                               [0, 0, 0, 0, 0, 0, 0, 0],
-                               [0, 0, 0, 0, 0, 0, 0, 0]])
-
-	def findValidMove(self, currentPlayer):
+def findValidMove(state, currentPlayer):
 		validMove = []
 		for y in range(8):
 			for x in range(8):
 
-				if self.state[y][x] != 0:
+				if state[y][x] != 0:
 					continue
 			
 				validDirections = findValidDirections(x,y)
@@ -226,58 +222,59 @@ class Board:
 
 					
 					if direction == "UP":
-						if checkUP(x, y-1, self.state, currentPlayer):
+						if checkUP(x, y-1, state, currentPlayer):
 							validMove.append((x, y))
 							break
 
 					if direction == "DOWN":
-						if checkDOWN(x, y+1, self.state, currentPlayer):
+						if checkDOWN(x, y+1, state, currentPlayer):
 							validMove.append((x, y))
 							break
 
 					if direction == "LEFT":
-						if checkLEFT(x-1, y, self.state, currentPlayer):
+						if checkLEFT(x-1, y, state, currentPlayer):
 							validMove.append((x, y))
 							break
 					
 					if direction == "RIGHT":
-						if checkRIGHT(x+1, y, self.state, currentPlayer):
+						if checkRIGHT(x+1, y, state, currentPlayer):
 							validMove.append((x, y))
 							break
 
 					if direction == "UP_LEFT":
-						if checkUP_LEFT(x-1, y-1, self.state, currentPlayer):
+						if checkUP_LEFT(x-1, y-1, state, currentPlayer):
 							validMove.append((x, y))
 							break
 
 					if direction == "UP_RIGHT":
-						if checkUP_RIGHT(x+1, y-1, self.state, currentPlayer):
+						if checkUP_RIGHT(x+1, y-1, state, currentPlayer):
 							validMove.append((x, y))
 							break
 
 					if direction == "DOWN_LEFT":
-						if checkDOWN_LEFT(x-1, y+1, self.state, currentPlayer):
+						if checkDOWN_LEFT(x-1, y+1, state, currentPlayer):
 							validMove.append((x, y))
 							break
 
 					if direction == "DOWN_RIGHT":
-						if checkDOWN_RIGHT(x+1, y+1, self.state, currentPlayer):
+						if checkDOWN_RIGHT(x+1, y+1, state, currentPlayer):
 							validMove.append((x, y))
 							break
 
 		return validMove
 	
-	def makeMove(self, Cell, currentPlayer):
+def makeMove(state, Cell, currentPlayer):
 		x, y = Cell
-		self.state[y][x] = currentPlayer
-		if y > 1: self.state = searchUP(self.state, x, y-1, currentPlayer)
-		if y < 6: self.state = searchDOWN(self.state, x, y+1, currentPlayer)
-		if x > 1: self.state = searchLEFT(self.state, x-1, y, currentPlayer)
-		if x < 6: self.state = searchRIGHT(self.state, x+1, y,currentPlayer)
-		if x > 1 and y > 1: self.state = searchUP_LEFT(self.state, x-1, y-1, currentPlayer)
-		if x > 1 and y < 6: self.state = searchDOWN_LEFT(self.state, x-1, y+1, currentPlayer)
-		if x < 6 and y > 1: self.state = searchUP_RIGHT(self.state, x+1, y-1, currentPlayer)
-		if x < 6 and y < 6: self.state = searchDOWN_RIGHT(self.state, x+1, y+1, currentPlayer)
+		state[y][x] = currentPlayer
+		if y > 1: state = searchUP(state, x, y-1, currentPlayer)
+		if y < 6: state = searchDOWN(state, x, y+1, currentPlayer)
+		if x > 1: state = searchLEFT(state, x-1, y, currentPlayer)
+		if x < 6: state = searchRIGHT(state, x+1, y,currentPlayer)
+		if x > 1 and y > 1: state = searchUP_LEFT(state, x-1, y-1, currentPlayer)
+		if x > 1 and y < 6: state = searchDOWN_LEFT(state, x-1, y+1, currentPlayer)
+		if x < 6 and y > 1: state = searchUP_RIGHT(state, x+1, y-1, currentPlayer)
+		if x < 6 and y < 6: state = searchDOWN_RIGHT(state, x+1, y+1, currentPlayer)
+		return state
 
 
 def select_move(cur_state=None, player_to_move=None, remain_time=None):

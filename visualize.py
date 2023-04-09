@@ -16,11 +16,18 @@ def loadSpriteSheet(sheet, row, col, newSize, size):
 	return image
 
 class Grid:
-	def __init__(self, board) -> None:
+	def __init__(self) -> None:
 		pygame.init()
 		self.screen = pygame.display.set_mode((700, 500))
 		pygame.display.set_caption('Reversi')
-		self.board = board
+		self.state = np.array([[0, 0, 0, 0, 0, 0, 0, 0],
+                               [0, 0, 0, 0, 0, 0, 0, 0],
+                               [0, 0, 0, 0, 1, 0, 0, 0],
+                               [0, 0, 0, 1, -1, 0, 0, 0],
+                               [0, 0, 0, -1, 1, 0, 0, 0],
+                               [0, 0, 0, 0, 0, 0, 0, 0],
+                               [0, 0, 0, 0, 0, 0, 0, 0],
+                               [0, 0, 0, 0, 0, 0, 0, 0]])
 		self.player1 = 1
 		self.player2 = -1
 
@@ -40,7 +47,7 @@ class Grid:
 
 	def run(self):
 		while self.RUN == True:
-			self.availableMove = self.board.findValidMove(self.currentPlayer)
+			self.availableMove = findValidMove(self.state, self.currentPlayer)
 			if self.availableMove == []:
 				self.currentPlayer = -self.currentPlayer
 				continue
@@ -54,7 +61,7 @@ class Grid:
 				x = int((x-50) / 50)
 				y = int((y-50) / 50)
 				if (x, y) in self.availableMove:
-					self.board.makeMove((x, y), self.currentPlayer)
+					self.state = makeMove(self.state, (x, y), self.currentPlayer)
 					self.currentPlayer = -self.currentPlayer
 			if event.type == pygame.QUIT:
 				pygame.quit()
@@ -97,9 +104,9 @@ class Grid:
 
 		for x in range(8):
 			for y in range(8):
-				if self.board.state[y][x] == 1:
+				if self.state[y][x] == 1:
 					window.blit(self.blacktoken, ( 50 + x*50, 50 + y*50))
-				if self.board.state[y][x] == -1:
+				if self.state[y][x] == -1:
 					window.blit(self.whitetoken, (50 + 50*x, 50 + y*50))
 
 
@@ -111,5 +118,5 @@ class Grid:
 
 
 	
-grid = Grid(Board())
+grid = Grid()
 grid.run()
