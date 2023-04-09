@@ -119,6 +119,7 @@ def searchUP(state, x, y, currentPlayer):
 			return state
 		state[y][x] = currentPlayer
 		y -= 1
+	return oldstate
 
 def searchDOWN(state,x, y, currentPlayer):
 	if state[y][x] == 0 or state[y][x] == currentPlayer:
@@ -131,6 +132,7 @@ def searchDOWN(state,x, y, currentPlayer):
 			return state
 		state[y][x] = currentPlayer
 		y += 1
+	return oldstate
 
 def searchLEFT(state, x, y, currentPlayer):
 	if state[y][x] == 0 or state[y][x] == currentPlayer:
@@ -143,6 +145,7 @@ def searchLEFT(state, x, y, currentPlayer):
 			return state
 		state[y][x] = currentPlayer
 		x -= 1
+	return oldstate
 
 def searchRIGHT(state, x, y, currentPlayer):
 	if state[y][x] == 0 or state[y][x] == currentPlayer:
@@ -155,6 +158,7 @@ def searchRIGHT(state, x, y, currentPlayer):
 			return state
 		state[y][x] = currentPlayer
 		x += 1
+	return oldstate
 
 def searchUP_LEFT(state, x, y, currentPlayer):
 	if state[y][x] == 0 or state[y][x] == currentPlayer:
@@ -168,6 +172,7 @@ def searchUP_LEFT(state, x, y, currentPlayer):
 		state[y][x] = currentPlayer
 		x -= 1
 		y -= 1
+	return oldstate
 
 def searchDOWN_LEFT(state, x, y, currentPlayer):
 	if state[y][x] == 0 or state[y][x] == currentPlayer:
@@ -181,6 +186,7 @@ def searchDOWN_LEFT(state, x, y, currentPlayer):
 		state[y][x] = currentPlayer
 		x -= 1
 		y += 1
+	return oldstate
 
 def searchUP_RIGHT(state, x, y, currentPlayer):
 	if state[y][x] == 0 or state[y][x] == currentPlayer:
@@ -194,6 +200,7 @@ def searchUP_RIGHT(state, x, y, currentPlayer):
 		state[y][x] = currentPlayer
 		x += 1
 		y -= 1
+	return oldstate
 
 def searchDOWN_RIGHT(state, x, y, currentPlayer):
 	if state[y][x] == 0 or state[y][x] == currentPlayer:
@@ -207,6 +214,7 @@ def searchDOWN_RIGHT(state, x, y, currentPlayer):
 		state[y][x] = currentPlayer
 		x += 1
 		y += 1
+	return oldstate
 
 def findValidMove(state, currentPlayer):
 		validMove = []
@@ -277,8 +285,8 @@ def makeMove(state, Cell, currentPlayer):
 		return state
 
 
-def select_move(cur_state=None, player_to_move=None, remain_time=None):
-	validMove = cur_state.findValidMove(player_to_move)
+def select_move(cur_state, player_to_move, remain_time=None):
+	validMove = findValidMove(cur_state, player_to_move)
 	#print(validMove)
 	if validMove == []:
 		return None
