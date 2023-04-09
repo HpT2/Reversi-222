@@ -36,13 +36,25 @@ class Grid:
 		self.bg = self.loadBackGroundImages()
 		self.gridBg = self.createbgimg()
 
+		self.availableMove = []
+
 	def run(self):
 		while self.RUN == True:
+			self.availableMove = self.board.findValidMove(self.currentPlayer)
 			self.input()
 			self.draw()
 
 	def input(self):
-		pass
+		for event in pygame.event.get():
+			if event.type == pygame.MOUSEBUTTONDOWN:
+				x, y = pygame.mouse.get_pos()
+				x = int((x-50) / 50)
+				y = int((y-50) / 50)
+				if (x, y) in self.availableMove:
+					self.board.makeMove((x, y), self.currentPlayer)
+					self.currentPlayer = -self.currentPlayer
+			if event.type == pygame.QUIT:
+				pygame.quit()
 
 	def draw(self):
 		self.screen.fill((0, 0, 0))
@@ -87,10 +99,9 @@ class Grid:
 				if self.board.state[y][x] == -1:
 					window.blit(self.whitetoken, (50 + 50*x, 50 + y*50))
 
-		availMoves = self.board.findValidMove(self.currentPlayer)
 
-		for move in availMoves:
-			pygame.draw.rect(window, 'White', (50 + (move[0] * 50) + 17, 50 + (move[1] * 50) + 15, 20, 20))
+		for move in self.availableMove:
+			pygame.draw.rect(window, 'Red', (50 + (move[0] * 50) + 17, 50 + (move[1] * 50) + 15, 20, 20))
 
 
 	
