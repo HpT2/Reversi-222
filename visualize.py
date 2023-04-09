@@ -35,8 +35,6 @@ class Grid:
 
 		self.bg = self.loadBackGroundImages()
 		self.gridBg = self.createbgimg()
-		#self.gridLogic = self.regenGrid(self.y, self.x)
-		self.font = pygame.font.SysFont('Arial', 20, True, False)
 
 	def run(self):
 		while self.RUN == True:
@@ -85,14 +83,14 @@ class Grid:
 		for x in range(8):
 			for y in range(8):
 				if self.board.state[y][x] == 1:
-					window.blit(self.blacktoken, (50 + y*50, 50 + x*50))
+					window.blit(self.blacktoken, ( 50 + x*50, 50 + y*50))
 				if self.board.state[y][x] == -1:
-					window.blit(self.whitetoken, (50 + 50*y, 50 + 50*x))
+					window.blit(self.whitetoken, (50 + 50*x, 50 + y*50))
 
 		availMoves = self.board.findValidMove(self.currentPlayer)
 
 		for move in availMoves:
-			pygame.draw.rect(window, 'White', (50 + (move[1] * 50) + 15, 50 + (move[0] * 50) + 17, 20, 20))
+			pygame.draw.rect(window, 'White', (50 + (move[0] * 50) + 17, 50 + (move[1] * 50) + 15, 20, 20))
 
 
 	

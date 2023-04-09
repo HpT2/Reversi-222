@@ -205,7 +205,7 @@ class Board:
 	def __init__(self):
 		self.state = np.array([[0, 0, 0, 0, 0, 0, 0, 0],
                                [0, 0, 0, 0, 0, 0, 0, 0],
-                               [0, 0, 0, 0, 0, 0, 0, 0],
+                               [0, 0, 0, 0, 1, 0, 0, 0],
                                [0, 0, 0, 1, -1, 0, 0, 0],
                                [0, 0, 0, -1, 1, 0, 0, 0],
                                [0, 0, 0, 0, 0, 0, 0, 0],
@@ -282,11 +282,11 @@ class Board:
 
 def select_move(cur_state=None, player_to_move=None, remain_time=None):
 	validMove = cur_state.findValidMove(player_to_move)
-	print(validMove)
+	#print(validMove)
 	if validMove == []:
 		return None
 
-"""test some move"""
+"""test some move
 game = Board()
 print(game.state)
 select_move(game, 1)
@@ -300,7 +300,7 @@ game.makeMove((5,5),1)
 game.makeMove((6,5),-1)
 print(game.state)
 select_move(game, -1)
-
+"""
 
 
 
