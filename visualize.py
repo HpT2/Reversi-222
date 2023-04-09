@@ -41,6 +41,9 @@ class Grid:
 	def run(self):
 		while self.RUN == True:
 			self.availableMove = self.board.findValidMove(self.currentPlayer)
+			if self.availableMove == []:
+				self.currentPlayer = -self.currentPlayer
+				continue
 			self.input()
 			self.draw()
 
@@ -101,7 +104,10 @@ class Grid:
 
 
 		for move in self.availableMove:
-			pygame.draw.rect(window, 'Red', (50 + (move[0] * 50) + 17, 50 + (move[1] * 50) + 15, 20, 20))
+			if self.currentPlayer == 1:
+				pygame.draw.rect(window, 'Black', (50 + (move[0] * 50) + 17, 50 + (move[1] * 50) + 15, 20, 20))
+			else:
+				pygame.draw.rect(window, 'White', (50 + (move[0] * 50) + 17, 50 + (move[1] * 50) + 15, 20, 20))				
 
 
 	
