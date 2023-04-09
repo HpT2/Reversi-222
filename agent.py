@@ -297,7 +297,10 @@ game.makeMove((4,5),-1)
 game.makeMove((4,6),1)
 game.makeMove((4,7),-1)
 game.makeMove((5,5),1)
+game.makeMove((6,5),-1)
 print(game.state)
+select_move(game, -1)
+
 
 
 
