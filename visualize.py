@@ -22,7 +22,7 @@ class Grid:
 		pygame.display.set_caption('Reversi')
 		self.state = np.array([[0, 0, 0, 0, 0, 0, 0, 0],
                                [0, 0, 0, 0, 0, 0, 0, 0],
-                               [0, 0, 0, 0, 1, 0, 0, 0],
+                               [0, 0, 0, 0, 0, 0, 0, 0],
                                [0, 0, 0, 1, -1, 0, 0, 0],
                                [0, 0, 0, -1, 1, 0, 0, 0],
                                [0, 0, 0, 0, 0, 0, 0, 0],
@@ -48,8 +48,14 @@ class Grid:
 	def run(self):
 		while self.RUN == True:
 			self.availableMove = findValidMove(self.state, self.currentPlayer)
+
 			if self.availableMove == []:
 				self.currentPlayer = -self.currentPlayer
+				continue
+			
+			if self.currentPlayer == 1:
+				self.state = makeMove(self.state, select_move(self.state, 1), 1)
+				self.currentPlayer = -1
 				continue
 			self.input()
 			self.draw()
@@ -62,7 +68,7 @@ class Grid:
 				y = int((y-50) / 50)
 				if (x, y) in self.availableMove:
 					self.state = makeMove(self.state, (x, y), self.currentPlayer)
-					self.currentPlayer = -self.currentPlayer
+					self.currentPlayer = 1
 			if event.type == pygame.QUIT:
 				pygame.quit()
 
@@ -112,6 +118,7 @@ class Grid:
 
 		for move in self.availableMove:
 			if self.currentPlayer == 1:
+				continue
 				pygame.draw.rect(window, 'Black', (50 + (move[0] * 50) + 17, 50 + (move[1] * 50) + 15, 20, 20))
 			else:
 				pygame.draw.rect(window, 'White', (50 + (move[0] * 50) + 17, 50 + (move[1] * 50) + 15, 20, 20))				

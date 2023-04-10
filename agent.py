@@ -1,6 +1,8 @@
 import numpy as np
+import timeit
 import time
 import copy
+import random
 REMAIN_TIME = 60000
 
 def findValidDirections(x, y):
@@ -285,27 +287,45 @@ def makeMove(state, Cell, currentPlayer):
 		return state
 
 
+
 def select_move(cur_state, player_to_move, remain_time=None):
 	validMove = findValidMove(cur_state, player_to_move)
+	state = copy.deepcopy(cur_state)
 	#print(validMove)
 	if validMove == []:
 		return None
+	
+	move = minimax(state, player_to_move, validMove, 0, float('-inf'))[1]
+	return move
 
-"""test some move
-game = Board()
-print(game.state)
-select_move(game, 1)
-game.makeMove((2,4), 1)
-game.makeMove((2,5),-1)
-game.makeMove((3,5),1)
-game.makeMove((4,5),-1)
-game.makeMove((4,6),1)
-game.makeMove((4,7),-1)
-game.makeMove((5,5),1)
-game.makeMove((6,5),-1)
-print(game.state)
-select_move(game, -1)
-"""
+def minimax(cur_state, player_to_move, validMove, depth, best_val):
+	start = timeit.default_timer()
+	best_move = None
+	if depth == 5 or validMove == []:
+		value = evaluate(cur_state, player_to_move)
+		return value, None
+
+	for a_move in validMove:
+		state = makeMove(cur_state, a_move, player_to_move)
+		new_valid_move = findValidMove(state, -player_to_move)
+		res = minimax(state, -player_to_move, new_valid_move, depth+1, best_val)
+		new_val = -res[0]
+
+		if new_val > best_val:
+			best_val = new_val
+			best_move = a_move
+
+
+	return (best_val, best_move)
+
+def evaluate(state, player_to_move):
+	score = 0
+	for y in range(8):
+		for x in range(8):
+			if state[y][x] == player_to_move:
+				score += 1
+	return score
+
 
 
 
