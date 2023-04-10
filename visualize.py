@@ -52,12 +52,15 @@ class Grid:
 			if self.availableMove == []:
 				self.currentPlayer = -self.currentPlayer
 				continue
-			
+
 			if self.currentPlayer == 1:
 				self.state = makeMove(self.state, select_move(self.state, 1), 1)
 				self.currentPlayer = -1
-				continue
-			self.input()
+			else:
+				self.state = makeMove(self.state, random.choice(self.availableMove), -1)
+				self.currentPlayer = 1
+			#self.input()
+
 			self.draw()
 
 	def input(self):
