@@ -312,7 +312,7 @@ def minimax(cur_state, player_to_move, validMove, depth, best_val, start, remain
 		return None
 	
 	best_move = None
-	if depth == 20 or validMove == []:
+	if depth == 5 or validMove == []:
 		value = evaluate(cur_state, player_to_move)
 		return value, None
 

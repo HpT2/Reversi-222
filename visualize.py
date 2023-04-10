@@ -19,7 +19,9 @@ def loadSpriteSheet(sheet, row, col, newSize, size):
 class Grid:
 	def __init__(self) -> None:
 		pygame.init()
+
 		self.screen = pygame.display.set_mode((700, 500))
+		self.screen.fill((0,0,0))
 		pygame.display.set_caption('Reversi')
 		self.state = np.array([[0, 0, 0, 0, 0, 0, 0, 0],
                                [0, 0, 0, 0, 0, 0, 0, 0],
@@ -44,45 +46,57 @@ class Grid:
 		self.bg = self.loadBackGroundImages()
 		self.gridBg = self.createbgimg()
 
+		self.font =  pygame.freetype.SysFont("Comic Sans MS", 20)
 		self.availableMove = []
 
 	def run(self):
+		i = 0
 		while self.RUN == True:
 			self.availableMove = findValidMove(self.state, self.currentPlayer)
-
+			self.draw(i)
 			if self.availableMove == []:
+				i += 1
 				self.currentPlayer = -self.currentPlayer
-				self.input()
 				continue
-			start = time.perf_counter()
+			
+			#pygame.time.wait(2000)
 			if self.currentPlayer == 1:
 				self.state = makeMove(self.state, select_move(self.state, 1), 1)
-				self.currentPlayer = -1
+				i -= 1
 			else:
 				self.state = makeMove(self.state, select_move(self.state, -1), -1)
-				self.currentPlayer = 1
-			#self.input()
-			print(time.perf_counter()-start)
-			self.draw()
-
+				i -= 1
+				#self.input()
+			print(self.score())
+			self.currentPlayer = -self.currentPlayer
+			
+			
 	def input(self):
-		for event in pygame.event.get():
-			'''
-			if event.type == pygame.MOUSEBUTTONDOWN:
-				x, y = pygame.mouse.get_pos()
-				x = int((x-50) / 50)
-				y = int((y-50) / 50)
-				if (x, y) in self.availableMove:
-					self.state = makeMove(self.state, (x, y), self.currentPlayer)
-					self.currentPlayer = 1
-			'''
-			if event.type == pygame.QUIT:
-				pygame.quit()
+		inputed = False
+		while not inputed:
+			for event in pygame.event.get():
+				
+				if event.type == pygame.MOUSEBUTTONDOWN:
+					x, y = pygame.mouse.get_pos()
+					x = int((x-50) / 50)
+					y = int((y-50) / 50)
+					if (x, y) in self.availableMove:
+						self.state = makeMove(self.state, (x, y), self.currentPlayer)
+						inputed = True
+				if event.type == pygame.QUIT:
+					pygame.quit()
 
-	def draw(self):
-		self.screen.fill((0, 0, 0))
+	def draw(self, i):
 		self.drawGrid(self.screen)
-		self.score()
+		if i >= 2:
+			w_score, b_score = self.score()
+			text = "Game End!" 
+			self.font.render_to(self.screen, (525, 50), text, (255, 255, 255))
+			text = "Black score: "+str(b_score) 
+			self.font.render_to(self.screen, (525, 100), text, (255, 255, 255))
+			text = "White score: "+str(w_score)
+			self.font.render_to(self.screen, (525, 150), text, (255, 255, 255))
+			self.input()
 		pygame.display.update()
 
 	def score(self):
@@ -94,7 +108,7 @@ class Grid:
 					b += 1
 				if self.state[y][x] == -1:
 					w += 1
-		#print("w_score: {}    b_score: {}".format(w,b))
+		return w, b
 
 
 	def loadBackGroundImages(self):
@@ -138,7 +152,6 @@ class Grid:
 
 		for move in self.availableMove:
 			if self.currentPlayer == 1:
-				continue
 				pygame.draw.rect(window, 'Black', (50 + (move[0] * 50) + 17, 50 + (move[1] * 50) + 15, 20, 20))
 			else:
 				pygame.draw.rect(window, 'White', (50 + (move[0] * 50) + 17, 50 + (move[1] * 50) + 15, 20, 20))				
