@@ -313,7 +313,7 @@ def minimax_alpha_beta(cur_state, player_to_move, validMove, depth, best_val,sta
 		return None
 	
 	best_move = None
-	if depth == 15 or validMove == []:
+	if depth == 12 or validMove == []:
 		value = evaluate(cur_state, player_to_move)
 		return value, None
 
@@ -345,6 +345,6 @@ def evaluate(state, player_to_move):
 		for x in range(8):
 			if state[y][x] == player_to_move:
 				score += 1
-			if state[y][x] == -player_to_move:
-				score -= 1
+			#if state[y][x] == -player_to_move:
+			#	score -= 1
 	return score

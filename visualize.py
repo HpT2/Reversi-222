@@ -55,7 +55,7 @@ class Grid:
 		while self.RUN == True:
 			self.availableMove = findValidMove(self.state, self.currentPlayer)
 			self.draw(i)
-			pygame.time.wait(500)
+			#pygame.time.wait(500)
 			if self.availableMove == []:
 
 				i += 1
