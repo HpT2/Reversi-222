@@ -1,3 +1,4 @@
+
 import pygame
 from agent import *
 
@@ -51,20 +52,22 @@ class Grid:
 
 			if self.availableMove == []:
 				self.currentPlayer = -self.currentPlayer
+				self.input()
 				continue
-
+			start = time.perf_counter()
 			if self.currentPlayer == 1:
 				self.state = makeMove(self.state, select_move(self.state, 1), 1)
 				self.currentPlayer = -1
 			else:
-				self.state = makeMove(self.state, random.choice(self.availableMove), -1)
+				self.state = makeMove(self.state, select_move(self.state, -1), -1)
 				self.currentPlayer = 1
 			#self.input()
-
+			print(time.perf_counter()-start)
 			self.draw()
 
 	def input(self):
 		for event in pygame.event.get():
+			'''
 			if event.type == pygame.MOUSEBUTTONDOWN:
 				x, y = pygame.mouse.get_pos()
 				x = int((x-50) / 50)
@@ -72,6 +75,7 @@ class Grid:
 				if (x, y) in self.availableMove:
 					self.state = makeMove(self.state, (x, y), self.currentPlayer)
 					self.currentPlayer = 1
+			'''
 			if event.type == pygame.QUIT:
 				pygame.quit()
 
@@ -90,7 +94,7 @@ class Grid:
 					b += 1
 				if self.state[y][x] == -1:
 					w += 1
-		print("w_score: {}    b_score: {}".format(w,b))
+		#print("w_score: {}    b_score: {}".format(w,b))
 
 
 	def loadBackGroundImages(self):
@@ -140,6 +144,6 @@ class Grid:
 				pygame.draw.rect(window, 'White', (50 + (move[0] * 50) + 17, 50 + (move[1] * 50) + 15, 20, 20))				
 
 
-	
-grid = Grid()
-grid.run()
+if __name__ == '__main__':
+	grid = Grid()
+	grid.run()

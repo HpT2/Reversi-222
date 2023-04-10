@@ -1,10 +1,10 @@
-import numpy as np
-import timeit
+import timeit	
 import time
 import copy
 import random
-REMAIN_TIME = 60000
+import numpy as np
 
+	
 def findValidDirections(x, y):
 	validDirections = []
 
@@ -274,41 +274,54 @@ def findValidMove(state, currentPlayer):
 		return validMove
 	
 def makeMove(state, Cell, currentPlayer):
-		x, y = Cell
-		state[y][x] = currentPlayer
-		if y > 1: state = searchUP(state, x, y-1, currentPlayer)
-		if y < 6: state = searchDOWN(state, x, y+1, currentPlayer)
-		if x > 1: state = searchLEFT(state, x-1, y, currentPlayer)
-		if x < 6: state = searchRIGHT(state, x+1, y,currentPlayer)
-		if x > 1 and y > 1: state = searchUP_LEFT(state, x-1, y-1, currentPlayer)
-		if x > 1 and y < 6: state = searchDOWN_LEFT(state, x-1, y+1, currentPlayer)
-		if x < 6 and y > 1: state = searchUP_RIGHT(state, x+1, y-1, currentPlayer)
-		if x < 6 and y < 6: state = searchDOWN_RIGHT(state, x+1, y+1, currentPlayer)
+		if Cell is not None:
+			x, y = Cell
+			state[y][x] = currentPlayer
+			if y > 1: state = searchUP(state, x, y-1, currentPlayer)
+			if y < 6: state = searchDOWN(state, x, y+1, currentPlayer)
+			if x > 1: state = searchLEFT(state, x-1, y, currentPlayer)
+			if x < 6: state = searchRIGHT(state, x+1, y,currentPlayer)
+			if x > 1 and y > 1: state = searchUP_LEFT(state, x-1, y-1, currentPlayer)
+			if x > 1 and y < 6: state = searchDOWN_LEFT(state, x-1, y+1, currentPlayer)
+			if x < 6 and y > 1: state = searchUP_RIGHT(state, x+1, y-1, currentPlayer)
+			if x < 6 and y < 6: state = searchDOWN_RIGHT(state, x+1, y+1, currentPlayer)
+		else:
+			print(str(currentPlayer) + " Lost turn")
 		return state
 
-
-
-def select_move(cur_state, player_to_move, remain_time=None):
+def select_move(cur_state, player_to_move, remain_time=10):
+	start = time.perf_counter()
 	validMove = findValidMove(cur_state, player_to_move)
 	state = copy.deepcopy(cur_state)
 	#print(validMove)
+	
 	if validMove == []:
 		return None
-	
-	move = minimax(state, player_to_move, validMove, 0, float('-inf'))[1]
-	return move
 
-def minimax(cur_state, player_to_move, validMove, depth, best_val):
-	start = timeit.default_timer()
+
+	move = minimax(state, player_to_move, validMove, 0, float('-inf'), start, remain_time)
+
+	return move[1] if move else random.choice(validMove)
+
+
+def minimax(cur_state, player_to_move, validMove, depth, best_val, start, remain_time):
+
+	execution_time = time.perf_counter() - start
+	if execution_time > 2.9995 or remain_time -  execution_time  <= 0.0005:
+		#print(execution_time)
+		return None
+	
 	best_move = None
-	if depth == 10 or validMove == []:
+	if depth == 20 or validMove == []:
 		value = evaluate(cur_state, player_to_move)
 		return value, None
 
 	for a_move in validMove:
 		state = makeMove(cur_state, a_move, player_to_move)
 		new_valid_move = findValidMove(state, -player_to_move)
-		res = minimax(state, -player_to_move, new_valid_move, depth+1, best_val)
+		res = minimax(state, -player_to_move, new_valid_move, depth+1, best_val, start, remain_time)
+		if res == None:	
+			return None
 		new_val = -res[0]
 
 		if new_val > best_val:
@@ -325,9 +338,3 @@ def evaluate(state, player_to_move):
 			if state[y][x] == player_to_move:
 				score += 1
 	return score
-
-
-
-
-
-
