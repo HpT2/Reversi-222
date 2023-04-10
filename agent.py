@@ -301,7 +301,7 @@ def select_move(cur_state, player_to_move, remain_time=None):
 def minimax(cur_state, player_to_move, validMove, depth, best_val):
 	start = timeit.default_timer()
 	best_move = None
-	if depth == 5 or validMove == []:
+	if depth == 10 or validMove == []:
 		value = evaluate(cur_state, player_to_move)
 		return value, None
 

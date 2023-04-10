@@ -78,7 +78,20 @@ class Grid:
 	def draw(self):
 		self.screen.fill((0, 0, 0))
 		self.drawGrid(self.screen)
+		self.score()
 		pygame.display.update()
+
+	def score(self):
+		w = 0
+		b = 0
+		for y in range(8):
+			for x in range(8):
+				if self.state[y][x] == 1:
+					b += 1
+				if self.state[y][x] == -1:
+					w += 1
+		print("w_score: {}    b_score: {}".format(w,b))
+
 
 	def loadBackGroundImages(self):
 		alpha = 'ABCDEFGHI'
