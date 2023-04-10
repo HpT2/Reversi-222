@@ -299,12 +299,13 @@ def select_move(cur_state, player_to_move, remain_time=10):
 		return None
 
 
-	move = minimax(state, player_to_move, validMove, 0, float('-inf'), start, remain_time)
+	move = minimax_alpha_beta(state, player_to_move, validMove, 0, float('-inf'), start, remain_time, -50, 50)
+	exec_time = time.perf_counter() - start
+	print("find move take: " +str(exec_time))
+	return move[1] if move and move[1] else random.choice(validMove)
 
-	return move[1] if move else random.choice(validMove)
 
-
-def minimax(cur_state, player_to_move, validMove, depth, best_val, start, remain_time):
+def minimax_alpha_beta(cur_state, player_to_move, validMove, depth, best_val,start, remain_time, alpha, beta):
 
 	execution_time = time.perf_counter() - start
 	if execution_time > 2.9995 or remain_time -  execution_time  <= 0.0005:
@@ -312,21 +313,28 @@ def minimax(cur_state, player_to_move, validMove, depth, best_val, start, remain
 		return None
 	
 	best_move = None
-	if depth == 5 or validMove == []:
+	if depth == 15 or validMove == []:
 		value = evaluate(cur_state, player_to_move)
 		return value, None
 
 	for a_move in validMove:
 		state = makeMove(cur_state, a_move, player_to_move)
 		new_valid_move = findValidMove(state, -player_to_move)
-		res = minimax(state, -player_to_move, new_valid_move, depth+1, best_val, start, remain_time)
+		res = minimax_alpha_beta(state, -player_to_move, new_valid_move, depth+1, best_val, start, remain_time, -beta, -alpha)
 		if res == None:	
 			return None
 		new_val = -res[0]
 
-		if new_val > best_val:
-			best_val = new_val
+		if new_val > alpha:
+			alpha = new_val
 			best_move = a_move
+
+		#if new_val > best_val:
+		#	best_val = new_val
+		#	best_move = a_move
+		
+		if alpha >= beta:
+			return alpha, best_move
 
 
 	return (best_val, best_move)
@@ -337,4 +345,6 @@ def evaluate(state, player_to_move):
 		for x in range(8):
 			if state[y][x] == player_to_move:
 				score += 1
+			if state[y][x] == -player_to_move:
+				score -= 1
 	return score

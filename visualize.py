@@ -51,38 +51,44 @@ class Grid:
 
 	def run(self):
 		i = 0
+		total_time = 0
 		while self.RUN == True:
 			self.availableMove = findValidMove(self.state, self.currentPlayer)
 			self.draw(i)
+			pygame.time.wait(500)
 			if self.availableMove == []:
+
 				i += 1
 				self.currentPlayer = -self.currentPlayer
+				print("Total time: "+ str(total_time))
 				continue
 			
-			#pygame.time.wait(2000)
 			if self.currentPlayer == 1:
+				start = time.perf_counter()
 				self.state = makeMove(self.state, select_move(self.state, 1), 1)
-				i -= 1
+				total_time += time.perf_counter() - start
+				i = 0
 			else:
-				self.state = makeMove(self.state, select_move(self.state, -1), -1)
-				i -= 1
+				self.state = makeMove(self.state, random.choice(self.availableMove), -1)
+				i = 0
 				#self.input()
-			print(self.score())
+			#print(self.score())
+			
 			self.currentPlayer = -self.currentPlayer
 			
 			
 	def input(self):
-		inputed = False
-		while not inputed:
+		#inputed = False
+		#while not inputed:
 			for event in pygame.event.get():
 				
-				if event.type == pygame.MOUSEBUTTONDOWN:
-					x, y = pygame.mouse.get_pos()
-					x = int((x-50) / 50)
-					y = int((y-50) / 50)
-					if (x, y) in self.availableMove:
-						self.state = makeMove(self.state, (x, y), self.currentPlayer)
-						inputed = True
+			#	if event.type == pygame.MOUSEBUTTONDOWN:
+			#		x, y = pygame.mouse.get_pos()
+			#		x = int((x-50) / 50)
+			#		y = int((y-50) / 50)
+			#		if (x, y) in self.availableMove:
+			#			self.state = makeMove(self.state, (x, y), self.currentPlayer)
+			#			inputed = True
 				if event.type == pygame.QUIT:
 					pygame.quit()
 
