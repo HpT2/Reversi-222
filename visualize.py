@@ -65,11 +65,18 @@ class Grid:
 
 			if self.currentPlayer == -1:
 				start = time.perf_counter()
-				self.state = makeMove(self.state, select_move(self.state, -1), -1)
-				total_time += time.perf_counter() - start
+				self.state = makeMove(self.state, random.choice(self.availableMove), -1)
+				#self.state = makeMove(self.state, select_move(self.state, -1),-1)
+				findMove_time = time.perf_counter() - start
+				print("White take {} seconds".format(findMove_time))
+				total_time += findMove_time
 				i = 0
 			else:
-				self.state = makeMove(self.state, random.choice(self.availableMove), 1)
+				start = time.perf_counter()
+				#self.state = makeMove(self.state, random.choice(self.availableMove), 1)
+				self.state = makeMove(self.state, select_move(self.state, 1),1)
+				findMove_time = time.perf_counter() - start
+				print("Black take {} seconds".format(findMove_time))
 				i = 0
 				#self.input()
 			#print(self.score())
@@ -90,6 +97,7 @@ class Grid:
 			#			self.state = makeMove(self.state, (x, y), self.currentPlayer)
 			#			inputed = True
 				if event.type == pygame.QUIT:
+					self.RUN = False
 					pygame.quit()
 
 	def draw(self, i):

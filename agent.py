@@ -300,10 +300,11 @@ def select_move(cur_state, player_to_move, remain_time=10):
 	if (7,0) in validMove: return (7,0)
 	if (7,7) in validMove: return (7,7)
 
+	if player_to_move == 1: depth = 0
+	else: depth = -10
 
-	move = minimax_alpha_beta(state, player_to_move, validMove, 0, float('-inf'), start, remain_time, -64, 64)
-	exec_time = time.perf_counter() - start
-	print("find move take: " +str(exec_time))
+	move = minimax_alpha_beta(state, player_to_move, validMove, depth, float('-inf'), start, remain_time, -64, 64)
+
 	return move[1] if move and move[1] else random.choice(validMove)
 
 
@@ -315,15 +316,17 @@ def minimax_alpha_beta(cur_state, player_to_move, validMove, depth, best_val,sta
 		return None
 	
 	best_move = None
-	if depth == 50 or validMove == []:
-		value = evaluate(cur_state, player_to_move)
-		return value, None
+	if depth == 20 or validMove == []:
+		#print(player_to_move)
+		return evaluate(cur_state, player_to_move), None
 
+	
 	for a_move in validMove:
+		
 		if a_move == (0,0) or a_move == (0,7) or a_move == (7,0) or a_move == (7,7):
-			#return 64, a_move
-			#return evaluate(cur_state, player_to_move) + count_0(cur_state), a_move
-			return evaluate(cur_state, player_to_move), a_move
+			return evaluate(cur_state, player_to_move) +18, None
+
+
 
 		state = makeMove(cur_state, a_move, player_to_move)
 		new_valid_move = findValidMove(state, -player_to_move)
@@ -336,9 +339,6 @@ def minimax_alpha_beta(cur_state, player_to_move, validMove, depth, best_val,sta
 			alpha = new_val
 			best_move = a_move
 
-		#if new_val > best_val:
-		#	best_val = new_val
-		#	best_move = a_move
 		
 		if alpha >= beta:
 			return alpha, best_move
@@ -352,15 +352,6 @@ def evaluate(state, player_to_move):
 		for x in range(8):
 			if state[y][x] == player_to_move:
 				score += 1
-			if state[y][x] == -player_to_move:
-				score -= 1
-	return score
-
-def count_0(state):
-	score = 0
-	for y in range(8):
-		for x in range(8):
-			if state[y][x] == 0:
-				score += 1
-
-	return score
+			#if state[y][x] == -player_to_move:
+			#	score -= 1
+	return score - len(findValidMove(state, -player_to_move))
