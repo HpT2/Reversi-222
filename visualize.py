@@ -31,8 +31,7 @@ class Grid:
                                [0, 0, 0, 0, 0, 0, 0, 0],
                                [0, 0, 0, 0, 0, 0, 0, 0],
                                [0, 0, 0, 0, 0, 0, 0, 0]])
-		self.player1 = 1
-		self.player2 = -1
+
 
 		self.currentPlayer = 1
 
@@ -60,16 +59,17 @@ class Grid:
 
 				i += 1
 				self.currentPlayer = -self.currentPlayer
-				print("Total time: "+ str(total_time))
+				if i ==2 :
+					print("Total time: "+ str(total_time))
 				continue
-			
-			if self.currentPlayer == 1:
+
+			if self.currentPlayer == -1:
 				start = time.perf_counter()
-				self.state = makeMove(self.state, select_move(self.state, 1), 1)
+				self.state = makeMove(self.state, select_move(self.state, -1), -1)
 				total_time += time.perf_counter() - start
 				i = 0
 			else:
-				self.state = makeMove(self.state, random.choice(self.availableMove), -1)
+				self.state = makeMove(self.state, random.choice(self.availableMove), 1)
 				i = 0
 				#self.input()
 			#print(self.score())

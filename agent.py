@@ -274,7 +274,6 @@ def findValidMove(state, currentPlayer):
 		return validMove
 	
 def makeMove(state, Cell, currentPlayer):
-		if Cell is not None:
 			x, y = Cell
 			state[y][x] = currentPlayer
 			if y > 1: state = searchUP(state, x, y-1, currentPlayer)
@@ -285,9 +284,7 @@ def makeMove(state, Cell, currentPlayer):
 			if x > 1 and y < 6: state = searchDOWN_LEFT(state, x-1, y+1, currentPlayer)
 			if x < 6 and y > 1: state = searchUP_RIGHT(state, x+1, y-1, currentPlayer)
 			if x < 6 and y < 6: state = searchDOWN_RIGHT(state, x+1, y+1, currentPlayer)
-		else:
-			print(str(currentPlayer) + " Lost turn")
-		return state
+			return state
 
 def select_move(cur_state, player_to_move, remain_time=10):
 	start = time.perf_counter()
@@ -298,8 +295,13 @@ def select_move(cur_state, player_to_move, remain_time=10):
 	if validMove == []:
 		return None
 
+	if (0,0) in validMove: return (0,0)
+	if (0,7) in validMove: return (0,7)
+	if (7,0) in validMove: return (7,0)
+	if (7,7) in validMove: return (7,7)
 
-	move = minimax_alpha_beta(state, player_to_move, validMove, 0, float('-inf'), start, remain_time, -50, 50)
+
+	move = minimax_alpha_beta(state, player_to_move, validMove, 0, float('-inf'), start, remain_time, -64, 64)
 	exec_time = time.perf_counter() - start
 	print("find move take: " +str(exec_time))
 	return move[1] if move and move[1] else random.choice(validMove)
@@ -313,11 +315,16 @@ def minimax_alpha_beta(cur_state, player_to_move, validMove, depth, best_val,sta
 		return None
 	
 	best_move = None
-	if depth == 12 or validMove == []:
+	if depth == 50 or validMove == []:
 		value = evaluate(cur_state, player_to_move)
 		return value, None
 
 	for a_move in validMove:
+		if a_move == (0,0) or a_move == (0,7) or a_move == (7,0) or a_move == (7,7):
+			#return 64, a_move
+			#return evaluate(cur_state, player_to_move) + count_0(cur_state), a_move
+			return evaluate(cur_state, player_to_move), a_move
+
 		state = makeMove(cur_state, a_move, player_to_move)
 		new_valid_move = findValidMove(state, -player_to_move)
 		res = minimax_alpha_beta(state, -player_to_move, new_valid_move, depth+1, best_val, start, remain_time, -beta, -alpha)
@@ -345,6 +352,15 @@ def evaluate(state, player_to_move):
 		for x in range(8):
 			if state[y][x] == player_to_move:
 				score += 1
-			#if state[y][x] == -player_to_move:
-			#	score -= 1
+			if state[y][x] == -player_to_move:
+				score -= 1
+	return score
+
+def count_0(state):
+	score = 0
+	for y in range(8):
+		for x in range(8):
+			if state[y][x] == 0:
+				score += 1
+
 	return score
