@@ -286,6 +286,49 @@ def makeMove(state, Cell, currentPlayer):
 			if x < 6 and y < 6: state = searchDOWN_RIGHT(state, x+1, y+1, currentPlayer)
 			return state
 
+def isGoodCellNextToCorner(state, player, Cell):
+	#UP LEFT CORNER
+	if state[0][0] == player:
+		if Cell in [(0,1), (1,0)]: return True
+		if Cell == (1,1) and state[1][0] ==  state[0][1] == state[0][2] == player == state[2][0] == player: return True
+	
+	#UP RIGHT CORNER
+	if state[0][7] == player:
+		if Cell in [(6,0), (7,1)]: return True
+		if Cell == (6,1) and state[0][6] == state[1][7] == state[0][5] == state[2][7] == player: return True
+
+	#BOTTOM LEFT CORNER
+	if state[7][0] == player:
+		if Cell in [(0,6), (1,7)]: return True
+		if Cell == (1,6) and state[6][0] == state[7][1] == state[5][0] == state[7][2] == player: return True
+
+
+	#BOTTOM RIGHT CORNER
+	if state[7][7] == player:
+		if Cell in [(6,7), (7,6)]: return True
+		if Cell == (6,6) and state[7][6] == state[6][7] == state[7][5] == state[5][7] == player: return True
+	
+	"""Good if next to corner and around is all opponent"""
+	if Cell == (1,1) and state[0][0] == state[1][0] == state[0][1] == state[0][2] == state[2][0] == state[2][2]\
+		== state[1][2] == state[2][1] == -player: return True
+	
+	if Cell == (6,1) and state[0][6] == state[1][7] == state[0][5] == state[2][7] \
+		== state[0][7] == state[2][5] == state[5][1] == state[2][6] == -player: return True
+	
+	if Cell == (1,6) and state[6][0] == state[7][1] == state[5][0] == state[7][2]\
+		== state[7][0] == state[5][1] == state[5][2] == state[6][2] == -player: return True
+	
+	if Cell == (6,6) and state[7][6] == state[6][7] == state[7][5] == state[5][7]\
+		 == state[7][7] == state[5][5] == state[5][6] == state[6][5] == player: return True
+
+	#Cell next to corner is bad
+	return False
+
+def isNextToCorner(Cell):
+	if Cell in [(0,1), (1,0), (1,1), (6,0), (7,1), (6,1), (0,6), (1,7), (1,6), (6,7), (7,6), (6,6)]:
+		return True
+	return False
+
 def select_move(cur_state, player_to_move, remain_time=10):
 	start = time.perf_counter()
 	validMove = findValidMove(cur_state, player_to_move)
@@ -300,10 +343,8 @@ def select_move(cur_state, player_to_move, remain_time=10):
 	if (7,0) in validMove: return (7,0)
 	if (7,7) in validMove: return (7,7)
 
-	if player_to_move == 1: depth = 0
-	else: depth = -10
 
-	move = minimax_alpha_beta(state, player_to_move, validMove, depth, float('-inf'), start, remain_time, -64, 64)
+	move = minimax_alpha_beta(state, player_to_move, validMove, 0, float('-inf'), start, remain_time, -64, 64)
 
 	return move[1] if move and move[1] else random.choice(validMove)
 
@@ -311,29 +352,34 @@ def select_move(cur_state, player_to_move, remain_time=10):
 def minimax_alpha_beta(cur_state, player_to_move, validMove, depth, best_val,start, remain_time, alpha, beta):
 
 	execution_time = time.perf_counter() - start
-	if execution_time > 2.9995 or remain_time -  execution_time  <= 0.0005:
+	if execution_time > 2.995 or remain_time -  execution_time  <= 0.0005:
 		#print(execution_time)
 		return None
 	
 	best_move = None
-	if depth == 20 or validMove == []:
+	if depth == 10 or validMove == []:
 		#print(player_to_move)
 		return evaluate(cur_state, player_to_move), None
 
 	
 	for a_move in validMove:
 		
-		if a_move == (0,0) or a_move == (0,7) or a_move == (7,0) or a_move == (7,7):
-			return evaluate(cur_state, player_to_move) +18, None
+		if a_move in [(0,0), (0,7), (7,0), (7,7)]:
+			#return evaluate(cur_state, player_to_move) +18, None
+			return 64, None
 
+		if isNextToCorner(a_move):
+			if isGoodCellNextToCorner(cur_state, player_to_move, a_move):
+				return 64, a_move
+			new_val = -64
 
-
-		state = makeMove(cur_state, a_move, player_to_move)
-		new_valid_move = findValidMove(state, -player_to_move)
-		res = minimax_alpha_beta(state, -player_to_move, new_valid_move, depth+1, best_val, start, remain_time, -beta, -alpha)
-		if res == None:	
-			return None
-		new_val = -res[0]
+		else:
+			state = makeMove(cur_state, a_move, player_to_move)
+			new_valid_move = findValidMove(state, -player_to_move)
+			res = minimax_alpha_beta(state, -player_to_move, new_valid_move, depth+1, best_val, start, remain_time, -beta, -alpha)
+			if res == None:	
+				return None
+			new_val = -res[0]
 
 		if new_val > alpha:
 			alpha = new_val

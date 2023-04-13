@@ -50,37 +50,41 @@ class Grid:
 
 	def run(self):
 		i = 0
-		total_time = 0
+		total_time_w = 0
+		total_time_b = 0
 		while self.RUN == True:
 			self.availableMove = findValidMove(self.state, self.currentPlayer)
 			self.draw(i)
 			#pygame.time.wait(500)
 			if self.availableMove == []:
-
 				i += 1
 				self.currentPlayer = -self.currentPlayer
 				if i ==2 :
-					print("Total time: "+ str(total_time))
+					print("Total time white: "+ str(total_time_w))
+					print("Total time black: "+ str(total_time_b))
+					self.input()
 				continue
 
 			if self.currentPlayer == -1:
 				start = time.perf_counter()
-				self.state = makeMove(self.state, random.choice(self.availableMove), -1)
-				#self.state = makeMove(self.state, select_move(self.state, -1),-1)
+				#self.state = makeMove(self.state, random.choice(self.availableMove), -1)
+				self.state = makeMove(self.state, select_move(self.state, -1),-1)
+				#self.input()
 				findMove_time = time.perf_counter() - start
 				print("White take {} seconds".format(findMove_time))
-				total_time += findMove_time
+				total_time_w += findMove_time
 				i = 0
 			else:
 				start = time.perf_counter()
-				#self.state = makeMove(self.state, random.choice(self.availableMove), 1)
-				self.state = makeMove(self.state, select_move(self.state, 1),1)
+				self.state = makeMove(self.state, random.choice(self.availableMove), 1)
+				#self.state = makeMove(self.state, select_move(self.state, 1),1)
 				findMove_time = time.perf_counter() - start
-				print("Black take {} seconds".format(findMove_time))
+				#print("Black take {} seconds".format(findMove_time))
+				total_time_b += findMove_time
 				i = 0
 				#self.input()
 			#print(self.score())
-			
+			#pygame.time.wait(5000)
 			self.currentPlayer = -self.currentPlayer
 			
 			
@@ -88,14 +92,16 @@ class Grid:
 		#inputed = False
 		#while not inputed:
 			for event in pygame.event.get():
-				
-			#	if event.type == pygame.MOUSEBUTTONDOWN:
-			#		x, y = pygame.mouse.get_pos()
-			#		x = int((x-50) / 50)
-			#		y = int((y-50) / 50)
-			#		if (x, y) in self.availableMove:
-			#			self.state = makeMove(self.state, (x, y), self.currentPlayer)
-			#			inputed = True
+				"""
+				if event.type == pygame.MOUSEBUTTONDOWN:
+					x, y = pygame.mouse.get_pos()
+					x = int((x-50) / 50)
+					y = int((y-50) / 50)
+					if (x, y) in self.availableMove:
+						self.state = makeMove(self.state, (x, y), self.currentPlayer)
+						
+					inputed = True
+				"""
 				if event.type == pygame.QUIT:
 					self.RUN = False
 					pygame.quit()
