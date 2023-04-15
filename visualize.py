@@ -1,6 +1,6 @@
 
 import pygame
-from agent import *
+from _2013823_2014731_2012385_2015043 import *
 
 def loadImages(path, size):
 	"""Load an image into the game, and scale the image"""
@@ -68,7 +68,7 @@ class Grid:
 			if self.currentPlayer == -1:
 				start = time.perf_counter()
 				self.state = makeMove(self.state, random.choice(self.availableMove), -1)
-				#self.state = makeMove(self.state, select_move(self.state, -1),-1)
+				#self.state = makeMove(self.state, select_move(self.state, -1, 60),-1)
 				#self.input()
 				findMove_time = time.perf_counter() - start
 				print("White take {} seconds".format(findMove_time))
@@ -77,7 +77,7 @@ class Grid:
 			else:
 				start = time.perf_counter()
 				#self.state = makeMove(self.state, random.choice(self.availableMove), 1)
-				self.state = makeMove(self.state, select_move(self.state, 1),1)
+				self.state = makeMove(self.state, select_move(self.state, 1, 60),1)
 				#self.input()
 				findMove_time = time.perf_counter() - start
 				

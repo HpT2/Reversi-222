@@ -1,8 +1,6 @@
-import timeit	
 import time
 import copy
 import random
-import numpy as np
 
 	
 def findValidDirections(x, y):
@@ -329,7 +327,7 @@ def isNextToCorner(Cell):
 		return True
 	return False
 
-def select_move(cur_state, player_to_move, remain_time=10):
+def select_move(cur_state, player_to_move, remain_time):
 	start = time.perf_counter()
 	validMove = findValidMove(cur_state, player_to_move)
 	state = copy.deepcopy(cur_state)
@@ -390,7 +388,7 @@ def minimax_alpha_beta(cur_state, player_to_move, validMove, depth,start, remain
 			return alpha, best_move
 
 	#print (best_move)
-	return (-64, best_move)
+	return -64, best_move
 
 def evaluate(state, player_to_move):
 	score = 0
